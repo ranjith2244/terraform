@@ -1,0 +1,85 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+ - shivani-terraform
+
+pool: linux-agent-pool
+stages:
+- stage: Terraform_Install
+  jobs:
+  - job: Install_Terraform
+    continueOnError : False
+    steps:
+    #- bash: echo "Terraform is getting installed in the agent."
+    - task: TerraformInstaller@0
+      displayName: 'Install Terraform'
+    - task: TerraformTaskV3@3
+      inputs:
+         provider: 'azurerm'
+         command: 'init'
+         workingDirectory: 'terraform'
+         backendServiceArm: 'Visual Studio Professional Subscription(1)(e228a3c6-cc6e-4fea-87f3-fafa70c85d19)'
+         backendAzureRmResourceGroupName: 'BackendRG'
+         backendAzureRmStorageAccountName: 'backendterraformsa'
+         backendAzureRmContainerName: 'tfstate'
+         backendAzureRmKey: 'key.tfstate'
+- stage: planterraform
+  jobs:
+   - job: Plan_Terraform
+     steps:
+     - task: TerraformInstaller@0
+       inputs:
+        terraformVersion: 'latest'
+     - task: TerraformTaskV3@3
+       inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'Visual Studio Professional Subscription(1)(e228a3c6-cc6e-4fea-87f3-fafa70c85d19)'
+            workingDirectory: 'terraform'
+            backendAzureRmResourceGroupName: 'BackendRG'
+            backendAzureRmStorageAccountName: 'backendterraformsa'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'key.tfstate' 
+
+     - task: TerraformTaskV3@3
+       inputs:
+         provider: 'azurerm'
+         command: 'plan'
+         workingDirectory: 'terraform'
+         commandOptions: '-var-file="variables.tfvars"'
+         environmentServiceNameAzureRM: 'Visual Studio Professional Subscription(1)(e228a3c6-cc6e-4fea-87f3-fafa70c85d19)'
+- stage: apply_terraform
+  jobs:
+  - job: Apply_Terraform
+    steps:
+    - task: TerraformInstaller@0
+      inputs:
+           terraformVersion: 'latest'
+    - task: TerraformTaskV3@3
+      inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'Visual Studio Professional Subscription(1)(e228a3c6-cc6e-4fea-87f3-fafa70c85d19)'
+            workingDirectory: terraform
+            backendAzureRmResourceGroupName: 'BackendRG'
+            backendAzureRmStorageAccountName: 'backendterraformsa'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'key.tfstate'
+    - task: TerraformTaskV3@3
+      inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            commandOptions: '-var-file="variables.tfvars"'
+            workingDirectory: 'terraform'
+            environmentServiceNameAzureRM: 'Visual Studio Professional Subscription(1)(e228a3c6-cc6e-4fea-87f3-fafa70c85d19)'
+    - task: TerraformTaskV3@3
+      inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            commandOptions: '-var-file="variables.tfvars"'
+            workingDirectory: 'terraform'
+            environmentServiceNameAzureRM: 'Visual Studio Professional Subscription(1)(e228a3c6-cc6e-4fea-87f3-fafa70c85d19)'
+         
