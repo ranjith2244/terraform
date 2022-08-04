@@ -1,4 +1,4 @@
-client_id = ""
+client_id = "5e29140b-2ef8-4d8b-8cf0-ed6fe68ee72a"
 subscription_id = "522a8a0d-041c-414e-a2b3-25d9f15b9557"
 tenant_id = "da483a7e-eef7-4571-8541-f3acfb0704d1"
 img = "test1"
