@@ -1,0 +1,5 @@
+client_id = ""
+subscription_id = ""
+tenant_id = ""
+img = ""
+rg = ""
