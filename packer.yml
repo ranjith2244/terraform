@@ -16,4 +16,4 @@ stages:
         - task: CmdLine@2
           inputs: 
             script: 'packer build -var="client_secret=$(client-secret)" -var-file="variable.pkrvars.hcl" iis.json.pkr.hcl'
-            workingDirectory: '$(Build.SourcesDirectory)/Packer'
+            workingDirectory: '$(Build.SourcesDirectory)'
