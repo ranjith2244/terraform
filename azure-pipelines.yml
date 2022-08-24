@@ -38,7 +38,16 @@ stages:
               - task: TerraformInstaller@0
                 displayName: 'install'
                 inputs:
-                  terraformVersion: 'latest'              
+                  terraformVersion: 'latest'
+              - task: TerraformTaskV3@3
+                inputs:
+                  provider: 'azurerm'
+                  command: 'init'
+                  backendServiceArm: 'dev'
+                  backendAzureRmResourceGroupName: 'terraform-rg'
+                  backendAzureRmStorageAccountName: 'testacct22444'
+                  backendAzureRmContainerName: 'devcontainer'
+                  backendAzureRmKey: 'terraform.tfstate'
               - task: TerraformTaskV3@3
                 displayName: 'Plan'
                 inputs:
