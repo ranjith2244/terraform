@@ -25,9 +25,9 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'validate'
-  - stage: deploy
+  - stage: Pan
     jobs:
-      - deployment: deploy_terraform
+      - deployment: Plan_terraform
         continueOnError: false
         environment: 'dev'
         strategy:
