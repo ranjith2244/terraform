@@ -26,6 +26,8 @@ stages:
           provider: 'azurerm'
           command: 'validate'
   - stage: Pan
+    variables:
+      - group: test
     jobs:
       - deployment: Plan_terraform
         continueOnError: false
@@ -47,7 +49,7 @@ stages:
                   backendAzureRmResourceGroupName: 'terraform-rg'
                   backendAzureRmStorageAccountName: 'testacct22444'
                   backendAzureRmContainerName: 'devcontainer'
-                  backendAzureRmKey: 'terraform.tfstate'
+                  backendAzureRmKey: $key
               - task: TerraformTaskV3@3
                 displayName: 'Plan'
                 inputs:
